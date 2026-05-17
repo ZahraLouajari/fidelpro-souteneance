@@ -218,4 +218,8 @@
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
   }
+
+  .mask-fade-edges {
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  }
 }

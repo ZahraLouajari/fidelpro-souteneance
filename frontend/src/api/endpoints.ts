@@ -40,7 +40,7 @@ export interface RegisterData {
 
 export interface ResetPasswordData {
   email: string;
-  token: string;
+  code: string;
   password: string;
   password_confirmation: string;
 }
@@ -109,6 +109,8 @@ export interface Restaurant {
   image?: string;
   visits_required: number;
   reward_description: string;
+  latitude?: number;
+  longitude?: number;
   is_active: boolean;
   created_at: string;
   owner?: User;
@@ -122,6 +124,8 @@ export interface CreateRestaurantData {
   visits_required: number;
   reward_description: string;
   owner_id?: number;
+  latitude?: number;
+  longitude?: number;
   is_active?: boolean;
 }
 
@@ -145,6 +149,51 @@ export interface Notification {
   type: 'points' | 'reward' | 'visit' | 'system';
   is_read: boolean;
   created_at: string;
+}
+
+export interface Review {
+  id: number;
+  user_id: number;
+  user: {
+    id: number;
+    name: string;
+    avatar?: string;
+    role?: string;
+  };
+  restaurant_id?: number;
+  rating: number;
+  comment: string;
+  type: 'platform' | 'restaurant';
+  created_at: string;
+}
+
+export interface PromoCode {
+  id: number;
+  code: string;
+  description: string;
+  type: 'percentage' | 'fixed' | 'free_item';
+  value: number;
+  formatted_value: string;
+  max_uses: number | null;
+  used_count: number;
+  usages_count?: number;
+  expires_at: string | null;
+  is_active: boolean;
+  is_expired: boolean;
+  is_valid: boolean;
+  created_at: string;
+  restaurant?: string;
+}
+
+export interface PromoCodeUsage {
+  id: number;
+  code: string;
+  description: string;
+  type: string;
+  value: number;
+  formatted_value: string;
+  restaurant: string;
+  used_at: string;
 }
 
 export interface NotificationsResponse {
@@ -258,6 +307,16 @@ export const clientAPI = {
   // Add this method
   joinRestaurant: (restaurantId: number) =>
     axios.post('/client/join-restaurant', { restaurant_id: restaurantId }),
+
+  referralStats: () =>
+    axios.get<{referral_code: string, total_points: number}>('/client/referral-stats'),
+
+  // Promo Codes
+  applyPromoCode: (code: string) =>
+    axios.post<{ message: string; promo_code: PromoCode }>('/client/promo-codes/apply', { code }),
+
+  promoHistory: () =>
+    axios.get<PromoCodeUsage[]>('/client/promo-codes/history'),
 };
 
 // ==================== RESTAURANT ENDPOINTS ====================
@@ -280,6 +339,22 @@ export const restaurantAPI = {
     axios.put('/restaurant/settings', data),
 
   weeklyStats: () => axios.get<{ day: string; visits: number }[]>('/restaurant/stats/weekly'),
+
+  getClientInfo: (clientId: number) =>
+    axios.get(`/restaurant/clients/${clientId}/info`),
+
+  // Promo Codes
+  getPromoCodes: () =>
+    axios.get<PromoCode[]>('/restaurant/promo-codes'),
+
+  createPromoCode: (data: { code?: string; description: string; type: string; value: number; max_uses?: number; expires_at?: string }) =>
+    axios.post<{ message: string; promo_code: PromoCode }>('/restaurant/promo-codes', data),
+
+  togglePromoCode: (id: number) =>
+    axios.put<{ message: string; promo_code: PromoCode }>(`/restaurant/promo-codes/${id}`),
+
+  deletePromoCode: (id: number) =>
+    axios.delete(`/restaurant/promo-codes/${id}`),
 };
 
 // ==================== ADMIN ENDPOINTS ====================
@@ -316,6 +391,18 @@ export const adminAPI = {
 
   topClients: () =>
     axios.get<{ name: string; visits: number; restaurants: number }[]>('/admin/analytics/top-clients'),
+
+  restaurantOwners: () =>
+    axios.get<{ id: number; name: string; email: string }[]>('/admin/analytics/owners'),
+
+  pendingReviews: (page: number = 1) =>
+    axios.get<{ data: Review[]; total: number }>(`/admin/reviews/pending?page=${page}`),
+  
+  approveReview: (reviewId: number) =>
+    axios.post(`/admin/reviews/${reviewId}/approve`),
+
+  deleteReview: (reviewId: number) =>
+    axios.delete(`/admin/reviews/${reviewId}`),
 };
 
 // ==================== NOTIFICATION ENDPOINTS ====================
@@ -326,4 +413,12 @@ export const notificationAPI = {
   markAllRead: () => axios.put('/notifications/read-all'),
   markRead: (id: number) => axios.put(`/notifications/${id}/read`),
   delete: (id: number) => axios.delete(`/notifications/${id}`),
+};
+
+// ==================== REVIEW ENDPOINTS ====================
+export const reviewAPI = {
+  platform: () => axios.get<Review[]>('/reviews/platform'),
+  restaurant: (id: number) => axios.get<Review[]>(`/reviews/restaurant/${id}`),
+  store: (data: { restaurant_id?: number; rating: number; comment: string; type: 'platform' | 'restaurant' }) =>
+    axios.post('/reviews', data),
 };

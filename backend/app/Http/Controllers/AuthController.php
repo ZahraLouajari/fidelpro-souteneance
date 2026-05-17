@@ -136,34 +136,32 @@ class AuthController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
         
+        $user = User::where('email', $request->email)->first();
+        
+        // Delete existing codes
+        VerificationCode::where('email', $request->email)->delete();
+        
+        // Generate 6-digit code
+        $code = rand(100000, 999999);
+        
+        // Save verification code
+        VerificationCode::create([
+            'email' => $request->email,
+            'code' => $code,
+            'expires_at' => now()->addMinutes(15),
+        ]);
+        
+        // Send email with code
         try {
-            $user = User::where('email', $request->email)->first();
-            
-            // Delete existing codes
-            VerificationCode::where('email', $request->email)->delete();
-            
-            // Generate 6-digit code
-            $code = rand(100000, 999999);
-            
-            // Save verification code
-            VerificationCode::create([
-                'email' => $request->email,
-                'code' => $code,
-                'expires_at' => now()->addMinutes(15),
-            ]);
-            
-            // Send email with code
-            Mail::to($request->email)->send(new VerificationCodeMail($code, $user->name, true));
-            
-            return response()->json([
-                'message' => 'Password reset code sent to your email',
-                'email' => $request->email
-            ]);
-            
+            Mail::to($request->email)->send(new VerificationCodeMail($code, $user->name ?? 'Client', true));
         } catch (\Exception $e) {
-            \Log::error('Forgot password error: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to send reset code'], 500);
+            \Log::error('Email sending failed: ' . $e->getMessage());
         }
+        
+        return response()->json([
+            'message' => 'Password reset code sent to your email',
+            'email' => $request->email
+        ]);
     }
     
     public function verifyCodeAndResetPassword(Request $request)
@@ -340,5 +338,16 @@ class AuthController extends Controller
             'message' => 'Profile updated successfully',
             'user' => $user
         ]);
+    }
+    
+    // ==================== ALIAS METHOD FOR RESET PASSWORD ====================
+    
+    /**
+     * Alias method for reset password (calls verifyCodeAndResetPassword)
+     * This allows the frontend to use 'resetPassword' endpoint
+     */
+    public function resetPassword(Request $request)
+    {
+        return $this->verifyCodeAndResetPassword($request);
     }
 }

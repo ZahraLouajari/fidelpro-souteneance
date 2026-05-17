@@ -1,54 +1,39 @@
 import axios from 'axios';
 
-// Create axios instance with base URL
-const axiosInstance = axios.create({
-  baseURL: '/api', // Will be proxied by Vite to http://localhost:8000/api
+const instance = axios.create({
+  // Utilise l'URL de production si disponible, sinon localhost
+  baseURL: import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api', 
+  timeout: 15000, 
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
+    'ngrok-skip-browser-warning': 'true', 
   },
-  timeout: 30000,
 });
 
-// Request interceptor to add token
-axiosInstance.interceptors.request.use(
+// Interceptor باش يصيفط الـ Token في كاع الطلبات (Authorization)
+instance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Response interceptor to handle errors
-axiosInstance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+// Interceptor باش يتشكا واش الـ Session تسلات (401)
+instance.interceptors.response.use(
+  (response) => response,
   (error) => {
-    // Handle 401 Unauthorized
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      window.location.href = '/login';
+      window.location.href = '/';
     }
-    
-    // Handle 403 Forbidden
-    if (error.response?.status === 403) {
-      console.error('Access forbidden:', error.response?.data?.error);
-    }
-    
-    // Handle 500 Server Error
-    if (error.response?.status === 500) {
-      console.error('Server error:', error.response?.data);
-    }
-    
     return Promise.reject(error);
   }
 );
 
-export default axiosInstance;
+export default instance;

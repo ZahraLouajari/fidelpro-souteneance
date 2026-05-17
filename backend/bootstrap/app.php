@@ -13,6 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Faire confiance aux proxys Azure pour l'HTTPS
+        $middleware->trustProxies(at: '*');
+
         // Enregistrer les aliases de middleware
         $middleware->alias([
             'role' => CheckRole::class,

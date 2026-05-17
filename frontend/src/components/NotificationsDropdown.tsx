@@ -1,37 +1,100 @@
 import { useState, useEffect } from 'react';
 import { Bell, Gift, Star, MapPin, Info, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { notificationAPI } from '@/api/endpoints';
 import type { Notification } from '@/api/endpoints';
 
 const iconMap: Record<string, React.ElementType> = {
   points: Star,
   reward: Gift,
-  visit: MapPin,
+  visit:  MapPin,
   system: Info,
-  info: Info,
+  info:   Info,
   success: Gift,
   warning: Star,
 };
 
+// ─── Traductions des notifications par type ───────────────────────────────────
+// Le backend stocke en français — on traduit côté frontend selon le type
+const NOTIF_TRANSLATIONS: Record<string, Record<string, { title: string; message: string }>> = {
+  visit: {
+    fr: { title: 'Visite enregistrée! ⭐',          message: 'Votre visite a été validée. Continuez comme ça!' },
+    en: { title: 'Visit recorded! ⭐',               message: 'Your visit has been validated. Keep it up!' },
+    ar: { title: 'تم تسجيل الزيارة! ⭐',            message: 'تم التحقق من زيارتك. واصل!' },
+  },
+  reward: {
+    fr: { title: 'Récompense débloquée! 🎁',         message: 'Vous avez gagné une récompense!' },
+    en: { title: 'Reward unlocked! 🎁',              message: 'You have earned a reward!' },
+    ar: { title: 'تم فتح المكافأة! 🎁',             message: 'لقد حصلت على مكافأة!' },
+  },
+  points: {
+    fr: { title: 'Points gagnés! ⭐',               message: 'Vous avez gagné des points.' },
+    en: { title: 'Points earned! ⭐',               message: 'You have earned points.' },
+    ar: { title: 'تم اكتساب النقاط! ⭐',           message: 'لقد اكتسبت نقاطاً.' },
+  },
+  system: {
+    fr: { title: 'Notification système',             message: 'Vous avez reçu un message.' },
+    en: { title: 'System notification',             message: 'You have received a message.' },
+    ar: { title: 'إشعار النظام',                   message: 'لقد تلقيت رسالة.' },
+  },
+};
+
+// Parse JSON multilingue ou retourne le texte tel quel
+function parseLang(raw: string, lang: string): string {
+  try {
+    const obj = JSON.parse(raw);
+    if (typeof obj === 'object' && obj !== null) {
+      const l = lang.startsWith('ar') ? 'ar' : lang.startsWith('en') ? 'en' : 'fr';
+      return obj[l] || obj['fr'] || raw;
+    }
+  } catch {}
+  return raw;
+}
+
+// Retourne le title/message traduit
+function getTranslated(
+  n: Notification,
+  lang: string
+): { title: string; message: string } {
+  const l = lang.startsWith('ar') ? 'ar' : lang.startsWith('en') ? 'en' : 'fr';
+
+  // 1 — Essai JSON multilingue (nouveau format backend)
+  let title   = parseLang(n.title,   lang);
+  let message = parseLang(n.message, lang);
+
+  // 2 — Fallback: table statique par type (ancien format FR)
+  if (title === n.title && l !== 'fr') {
+    const map = NOTIF_TRANSLATIONS[n.type];
+    if (map && map[l]) {
+      title   = map[l].title;
+      // message reste FR (contient les noms dynamiques)
+    }
+  }
+
+  return { title, message };
+}
+
 export default function NotificationsDropdown() {
-  const [open, setOpen] = useState(false);
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language || 'fr';
+
+  const [open, setOpen]                   = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [unreadCount, setUnreadCount] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [unreadCount, setUnreadCount]     = useState<number>(0);
+  const [loading, setLoading]             = useState<boolean>(true);
 
   const fetchNotifications = async () => {
     try {
       setLoading(true);
       const response = await notificationAPI.getAll();
-      // response.data fih { notifications: [], unread_count: number }
       const data = response.data;
       if (data && typeof data === 'object' && 'notifications' in data) {
         setNotifications(data.notifications);
         setUnreadCount(data.unread_count);
       } else if (Array.isArray(data)) {
         setNotifications(data);
-        setUnreadCount(data.filter(n => !n.is_read).length);
+        setUnreadCount(data.filter((n: Notification) => !n.is_read).length);
       }
     } catch (err) {
       console.error('Error fetching notifications:', err);
@@ -43,25 +106,17 @@ export default function NotificationsDropdown() {
   const markAsRead = async (id: number) => {
     try {
       await notificationAPI.markRead(id);
-      setNotifications(prev =>
-        prev.map(n => n.id === id ? { ...n, is_read: true } : n)
-      );
+      setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
       setUnreadCount(prev => Math.max(0, prev - 1));
-    } catch (err) {
-      console.error('Error marking notification as read:', err);
-    }
+    } catch {}
   };
 
   const markAllAsRead = async () => {
     try {
       await notificationAPI.markAllRead();
-      setNotifications(prev =>
-        prev.map(n => ({ ...n, is_read: true }))
-      );
+      setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
       setUnreadCount(0);
-    } catch (err) {
-      console.error('Error marking all as read:', err);
-    }
+    } catch {}
   };
 
   const deleteNotification = async (id: number, e: React.MouseEvent) => {
@@ -69,13 +124,9 @@ export default function NotificationsDropdown() {
     try {
       await notificationAPI.delete(id);
       setNotifications(prev => prev.filter(n => n.id !== id));
-      const deletedWasUnread = notifications.find(n => n.id === id)?.is_read === false;
-      if (deletedWasUnread) {
-        setUnreadCount(prev => Math.max(0, prev - 1));
-      }
-    } catch (err) {
-      console.error('Error deleting notification:', err);
-    }
+      const wasUnread = notifications.find(n => n.id === id)?.is_read === false;
+      if (wasUnread) setUnreadCount(prev => Math.max(0, prev - 1));
+    } catch {}
   };
 
   useEffect(() => {
@@ -115,27 +166,30 @@ export default function NotificationsDropdown() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 8, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="absolute right-0 top-12 w-80 bg-card border border-border rounded-xl shadow-lg z-50 overflow-hidden"
+              className="absolute end-0 top-12 w-80 bg-card border border-border rounded-xl shadow-lg z-50 overflow-hidden"
             >
+              {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-border">
-                <h3 className="font-display font-semibold text-foreground">Notifications</h3>
+                <h3 className="font-display font-semibold text-foreground">
+                  {t('notifications.title')}
+                </h3>
                 {unreadCount > 0 && (
-                  <button 
-                    onClick={markAllAsRead} 
-                    className="text-xs text-primary hover:underline"
-                  >
-                    Mark all read
+                  <button onClick={markAllAsRead} className="text-xs text-primary hover:underline">
+                    {t('notifications.mark_all_read')}
                   </button>
                 )}
               </div>
+
+              {/* List */}
               <div className="max-h-80 overflow-y-auto">
                 {notifications.length === 0 ? (
                   <div className="p-8 text-center text-muted-foreground">
-                    No notifications yet
+                    {t('notifications.no_notifications')}
                   </div>
                 ) : (
                   notifications.map((n) => {
                     const Icon = iconMap[n.type] || Info;
+                    const { title, message } = getTranslated(n, lang);
                     return (
                       <div
                         key={n.id}
@@ -148,19 +202,23 @@ export default function NotificationsDropdown() {
                           <Icon className="w-4 h-4 text-primary" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-foreground">{n.title}</p>
-                          <p className="text-xs text-muted-foreground mt-0.5">{n.message}</p>
+                          <p className="text-sm font-medium text-foreground">{title}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{message}</p>
                           <p className="text-xs text-muted-foreground/60 mt-1">
-                            {new Date(n.created_at).toLocaleDateString()}
+                            {new Date(n.created_at).toLocaleDateString(
+                              lang.startsWith('ar') ? 'ar-MA' : lang.startsWith('en') ? 'en-GB' : 'fr-FR'
+                            )}
                           </p>
                         </div>
                         <button
                           onClick={(e) => deleteNotification(n.id, e)}
-                          className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity"
+                          className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity flex-shrink-0"
                         >
                           <X className="w-4 h-4" />
                         </button>
-                        {!n.is_read && <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />}
+                        {!n.is_read && (
+                          <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
+                        )}
                       </div>
                     );
                   })

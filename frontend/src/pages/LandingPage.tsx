@@ -1,45 +1,86 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, Shield, Star, Gift, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import heroBg from '@/assets/hero-bg.jpg';
 import ThemeToggle from '@/components/ThemeToggle';
-
-const features = [
-  { icon: Star, title: 'Earn Points', desc: 'Collect loyalty points with every visit to your favorite restaurants.' },
-  { icon: Gift, title: 'Unlock Rewards', desc: 'Redeem your points for exclusive dining experiences and free meals.' },
-  { icon: Shield, title: 'Secure & Simple', desc: 'Your data is protected with enterprise-grade security standards.' },
-];
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import Navbar from '@/components/Navbar';
+import ReviewsSection from '@/components/ReviewsSection';
+import { useAuth } from '@/lib/auth-context';
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { user } = useAuth();
+  const { scrollY } = useScroll();
+  const yHero = useTransform(scrollY, [0, 500], [0, 150]);
+  const opacityHero = useTransform(scrollY, [0, 300], [1, 0]);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
+  const features = [
+    { icon: Star,   title: t('landing.feature_points_title'),  desc: t('landing.feature_points_desc')  },
+    { icon: Gift,   title: t('landing.feature_rewards_title'), desc: t('landing.feature_rewards_desc') },
+    { icon: Shield, title: t('landing.feature_secure_title'),  desc: t('landing.feature_secure_desc')  },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
+      <Navbar />
       {/* Hero */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <img
+        <motion.img
           src={heroBg}
           alt="Elegant restaurant ambiance"
           className="absolute inset-0 w-full h-full object-cover"
+          style={{ y: yHero }}
           width={1920}
           height={1080}
         />
         <div className="absolute inset-0" style={{ background: 'var(--gradient-hero)' }} />
 
-        <div className="absolute top-6 right-6 z-20">
-          <ThemeToggle />
-        </div>
 
         <div className="relative z-10 text-center px-6 max-w-3xl">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-5xl md:text-7xl font-display font-bold text-primary-foreground mb-6 leading-tight"
-            style={{ color: 'hsl(30, 25%, 95%)' }}
+            className="text-5xl md:text-7xl font-display font-bold mb-6 leading-tight"
+            style={{ color: 'hsl(30, 25%, 95%)', opacity: opacityHero }}
           >
-            Dining Loyalty,{' '}
-            <span className="text-gradient-warm">Reimagined</span>
+            {t('landing.hero_title').split(' ').map((word, i) => (
+              <motion.span
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * i, duration: 0.5 }}
+                className="inline-block mr-3"
+              >
+                {word}
+              </motion.span>
+            ))}
+            <motion.span 
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.8, duration: 0.5 }}
+              className="text-gradient-warm block md:inline"
+            >
+              {t('landing.hero_highlight')}
+            </motion.span>
           </motion.h1>
 
           <motion.p
@@ -49,8 +90,7 @@ export default function LandingPage() {
             className="text-lg md:text-xl mb-10 max-w-xl mx-auto"
             style={{ color: 'hsl(30, 15%, 75%)' }}
           >
-            The premium loyalty platform for restaurants and their guests.
-            Earn rewards, build relationships, grow your business.
+            {t('landing.hero_subtitle')}
           </motion.p>
 
           <motion.div
@@ -59,19 +99,27 @@ export default function LandingPage() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <button
-              onClick={() => navigate('/login')}
-              className="btn-warm text-base px-8 py-4 flex items-center justify-center gap-2"
-            >
-              Sign In <ArrowRight className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => navigate('/register')}
-              className="px-8 py-4 rounded-lg text-base font-medium border transition-all duration-300 hover:bg-primary-foreground/10"
-              style={{ color: 'hsl(30, 25%, 90%)', borderColor: 'hsla(30, 25%, 90%, 0.3)' }}
-            >
-              Create Account
-            </button>
+              {user ? (
+                <button onClick={() => navigate('/dashboard')} className="btn-warm text-base px-8 py-4">
+                  {t('nav.dashboard')}
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={() => navigate('/login')}
+                    className="btn-warm text-base px-8 py-4 flex items-center justify-center gap-2"
+                  >
+                    {t('landing.cta_signin')} <ArrowRight className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => navigate('/register')}
+                    className="px-8 py-4 rounded-lg text-base font-medium border transition-all duration-300 hover:bg-primary-foreground/10"
+                    style={{ color: 'hsl(30, 25%, 90%)', borderColor: 'hsla(30, 25%, 90%, 0.3)' }}
+                  >
+                    {t('landing.cta_register')}
+                  </button>
+                </>
+              )}
           </motion.div>
         </div>
 
@@ -96,33 +144,48 @@ export default function LandingPage() {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">
-              Why <span className="text-gradient-warm">FidélitéPro</span>?
+              {t('landing.features_title')} <span className="text-gradient-warm">FidélitéPro</span>?
             </h2>
             <p className="text-muted-foreground max-w-lg mx-auto">
-              A complete loyalty ecosystem designed for the modern dining experience.
+              {t('landing.features_subtitle')}
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="grid md:grid-cols-3 gap-8"
+          >
             {features.map((f, i) => (
               <motion.div
-                key={f.title}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.15 }}
-                className="card-elegant text-center"
+                key={i}
+                variants={itemVariants}
+                whileHover={{ 
+                  y: -10, 
+                  transition: { duration: 0.3 },
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.1)"
+                }}
+                className="card-elegant text-center group"
               >
-                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-5">
+                <motion.div 
+                  whileHover={{ rotate: 360, scale: 1.1 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                  className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-5 group-hover:bg-primary/20 transition-colors"
+                >
                   <f.icon className="w-7 h-7 text-primary" />
-                </div>
+                </motion.div>
                 <h3 className="font-display text-xl font-semibold text-foreground mb-3">{f.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
+
+      {/* Reviews */}
+      <ReviewsSection />
 
       {/* CTA */}
       <section className="py-20 px-6 bg-secondary">
@@ -133,13 +196,16 @@ export default function LandingPage() {
           className="max-w-2xl mx-auto text-center"
         >
           <h2 className="text-3xl font-display font-bold text-foreground mb-4">
-            Ready to elevate your dining loyalty?
+            {t('landing.cta_section_title')}
           </h2>
           <p className="text-muted-foreground mb-8">
-            Join thousands of restaurants already using FidélitéPro.
+            {t('landing.cta_section_sub')}
           </p>
-          <button onClick={() => navigate('/register')} className="btn-warm text-base px-8 py-4">
-            Get Started Free
+          <button 
+            onClick={() => navigate(user ? '/dashboard' : '/register')} 
+            className="btn-warm text-base px-8 py-4"
+          >
+            {user ? t('nav.dashboard') : t('landing.cta_start')}
           </button>
         </motion.div>
       </section>
@@ -147,7 +213,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="py-8 px-6 border-t border-border bg-background">
         <p className="text-center text-sm text-muted-foreground">
-          © 2026 FidélitéPro. All rights reserved.
+          {t('landing.footer')}
         </p>
       </footer>
     </div>

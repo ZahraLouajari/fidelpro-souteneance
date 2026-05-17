@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Models\Restaurant;
 use App\Models\Visit;
 use App\Models\CustomNotification;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -43,6 +44,15 @@ class AdminController extends Controller
             ->paginate(20);
 
         return response()->json($clients);
+    }
+
+    public function restaurantOwners()
+    {
+        $owners = User::where('role', 'restaurant')
+            ->orderBy('name')
+            ->get(['id', 'name', 'email']);
+
+        return response()->json($owners);
     }
 
     public function restaurants()
@@ -113,6 +123,8 @@ class AdminController extends Controller
             'owner_id'           => 'required|exists:users,id',
             'name'               => 'required|string|max:100',
             'location'           => 'required|string|max:200',
+            'latitude'           => 'nullable|numeric',
+            'longitude'          => 'nullable|numeric',
             'category'           => 'nullable|string|max:50',
             'visits_required'    => 'required|integer|min:3',
             'reward_description' => 'required|string|max:200',
@@ -207,5 +219,31 @@ class AdminController extends Controller
             ]);
 
         return response()->json($data);
+    }
+
+    public function pendingReviews()
+    {
+        $reviews = Review::where('is_approved', false)
+            ->with(['user:id,name,role', 'restaurant:id,name'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(20);
+
+        return response()->json($reviews);
+    }
+
+    public function approveReview($reviewId)
+    {
+        $review = Review::findOrFail($reviewId);
+        $review->update(['is_approved' => true]);
+
+        return response()->json(['message' => 'Avis approuvé.']);
+    }
+
+    public function deleteReview($reviewId)
+    {
+        $review = Review::findOrFail($reviewId);
+        $review->delete();
+
+        return response()->json(['message' => 'Avis supprimé.']);
     }
 }

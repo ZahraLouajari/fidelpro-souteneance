@@ -9,7 +9,7 @@ class Restaurant extends Model
     use HasFactory;
 
     protected $fillable = [
-        'owner_id', 'name', 'location', 'category', 'image',
+        'owner_id', 'name', 'location', 'latitude', 'longitude', 'category', 'image',
         'visits_required', 'reward_description', 'is_active',
     ];
 
@@ -35,5 +35,15 @@ class Restaurant extends Model
     public function rewards()
     {
         return $this->hasMany(Reward::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function promoCodes()
+    {
+        return $this->hasMany(PromoCode::class);
     }
 }

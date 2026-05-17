@@ -15,7 +15,7 @@ class NotificationController extends Controller
     public function index()
     {
         try {
-            $user = auth()->user();
+            $user = auth('api')->user();
             
             $notifications = CustomNotification::where('user_id', $user->id)
                 ->orderBy('created_at', 'desc')
@@ -39,7 +39,7 @@ class NotificationController extends Controller
     public function unreadCount()
     {
         try {
-            $user = auth()->user();
+            $user = auth('api')->user();
             
             $count = CustomNotification::where('user_id', $user->id)
                 ->where('is_read', false)
@@ -61,7 +61,7 @@ class NotificationController extends Controller
     public function markAsRead($id)
     {
         try {
-            $user = auth()->user();
+            $user = auth('api')->user();
             
             $notification = CustomNotification::where('user_id', $user->id)
                 ->where('id', $id)
@@ -84,7 +84,7 @@ class NotificationController extends Controller
     public function markAllAsRead()
     {
         try {
-            $user = auth()->user();
+            $user = auth('api')->user();
             
             CustomNotification::where('user_id', $user->id)
                 ->where('is_read', false)
@@ -106,7 +106,7 @@ class NotificationController extends Controller
     public function destroy($id)
     {
         try {
-            $user = auth()->user();
+            $user = auth('api')->user();
             
             $notification = CustomNotification::where('user_id', $user->id)
                 ->where('id', $id)
