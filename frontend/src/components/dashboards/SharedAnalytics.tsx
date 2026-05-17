@@ -1,13 +1,16 @@
 import { weeklyVisitsData, monthlyGrowthData, categoryDistribution } from '@/lib/mock-data';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { useTranslation } from 'react-i18next';
 
 export default function SharedAnalytics() {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-display font-bold text-foreground">Analytics</h2>
+      <h2 className="text-2xl font-display font-bold text-foreground">{t('dashboard.analytics')}</h2>
       <div className="grid lg:grid-cols-2 gap-6">
         <div className="card-elegant">
-          <h3 className="font-display text-lg font-semibold text-foreground mb-4">Weekly Visits</h3>
+          <h3 className="font-display text-lg font-semibold text-foreground mb-4">{t('client.weekly_visits')}</h3>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={weeklyVisitsData}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -19,7 +22,7 @@ export default function SharedAnalytics() {
           </ResponsiveContainer>
         </div>
         <div className="card-elegant">
-          <h3 className="font-display text-lg font-semibold text-foreground mb-4">Growth</h3>
+          <h3 className="font-display text-lg font-semibold text-foreground mb-4">{t('admin.growth')}</h3>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={monthlyGrowthData}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -33,7 +36,7 @@ export default function SharedAnalytics() {
           </ResponsiveContainer>
         </div>
         <div className="card-elegant lg:col-span-2">
-          <h3 className="font-display text-lg font-semibold text-foreground mb-4">Restaurant Categories</h3>
+          <h3 className="font-display text-lg font-semibold text-foreground mb-4">{t('admin.restaurant_categories')}</h3>
           <ResponsiveContainer width="100%" height={280}>
             <PieChart>
               <Pie data={categoryDistribution} dataKey="value" cx="50%" cy="50%" outerRadius={100} innerRadius={50} paddingAngle={3} label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>

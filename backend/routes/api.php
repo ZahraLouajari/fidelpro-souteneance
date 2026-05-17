@@ -60,6 +60,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('loyalty-cards',                    [ClientController::class, 'loyaltyCards']);
         Route::post('loyalty-cards/{cardId}/cancel-visit', [ClientController::class, 'cancelVisit']);
         Route::get('rewards',                          [ClientController::class, 'rewards']);
+        Route::get('referral-stats',                   [ClientController::class, 'referralStats']);
         Route::post('rewards/{rewardId}/redeem',       [ClientController::class, 'redeemReward']);
         Route::post('join-restaurant',                 [ClientController::class, 'joinRestaurant']);
 

@@ -444,7 +444,7 @@ export default function AdminDashboard({ tab }: { tab: string }) {
                     <div>
                       <p className="font-semibold text-foreground text-sm">{review.user?.name}</p>
                       <p className="text-xs text-muted-foreground">
-                        {review.type === 'restaurant' ? `Avis sur: ${review.restaurant?.name}` : 'Avis plateforme'}
+                        {review.type === 'restaurant' ? `${t('admin.review_restaurant')}: ${review.restaurant?.name}` : t('admin.review_platform')}
                       </p>
                     </div>
                   </div>

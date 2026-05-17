@@ -12,6 +12,9 @@
     "logout": "Logout"
   },
   "landing": {
+    "nav_features": "Features",
+    "nav_about": "About",
+    "nav_contact": "Contact",
     "hero_title": "Dining loyalty,",
     "hero_highlight": "Reimagined",
     "hero_subtitle": "The premium loyalty platform for restaurants and their guests. Earn rewards, build relationships, grow your business.",
@@ -120,7 +123,10 @@
     "expired": "Expired",
     "available": "Available",
     "weekly_visits": "Weekly visits",
-    "rate": "Rate"
+    "rate": "Rate",
+    "invite_friends": "Invite your friends!",
+    "invite_desc": "Share your code and earn points for each friend who signs up and records a visit.",
+    "your_code": "Your unique code"
   },
   "restaurant": {
     "total_clients": "Total clients",
@@ -178,7 +184,9 @@
     "save_changes": "Save Changes",
     "moderation_title": "Moderation",
     "no_pending_reviews": "No pending reviews.",
-    "approve": "Approve"
+    "approve": "Approve",
+    "review_platform": "Platform review",
+    "review_restaurant": "Review for"
   },
   "notifications": {
     "title": "Notifications",
@@ -202,7 +210,8 @@
     "visits": "visits",
     "submit": "Submit",
     "restaurant_owner": "Restaurant Owner",
-    "client": "Client"
+    "client": "Client",
+    "copied": "Code copied!"
   },
   "review": {
     "title_platform": "Your thoughts on FidélitéPro",

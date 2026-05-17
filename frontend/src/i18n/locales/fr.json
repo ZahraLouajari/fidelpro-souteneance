@@ -12,6 +12,9 @@
     "logout": "Déconnexion"
   },
   "landing": {
+    "nav_features": "Fonctionnalités",
+    "nav_about": "À propos",
+    "nav_contact": "Contact",
     "hero_title": "La fidélité restaurant,",
     "hero_highlight": "réinventée",
     "hero_subtitle": "La plateforme de fidélité premium pour les restaurants et leurs clients. Gagnez des récompenses, construisez des relations, développez votre activité.",
@@ -120,7 +123,10 @@
     "expired": "Expirée",
     "available": "Disponible",
     "weekly_visits": "Visites hebdomadaires",
-    "rate": "Noter"
+    "rate": "Noter",
+    "invite_friends": "Invitez vos amis !",
+    "invite_desc": "Partagez votre code et gagnez des points pour chaque ami qui s'inscrit et enregistre une visite.",
+    "your_code": "Votre code unique"
   },
   "restaurant": {
     "total_clients": "Total clients",
@@ -178,7 +184,9 @@
     "save_changes": "Enregistrer",
     "moderation_title": "Modération",
     "no_pending_reviews": "Aucun avis en attente.",
-    "approve": "Approuver"
+    "approve": "Approuver",
+    "review_platform": "Avis plateforme",
+    "review_restaurant": "Avis sur"
   },
   "notifications": {
     "title": "Notifications",
@@ -202,7 +210,8 @@
     "visits": "visites",
     "submit": "Envoyer",
     "restaurant_owner": "Restaurateur",
-    "client": "Client"
+    "client": "Client",
+    "copied": "Code copié !"
   },
   "review": {
     "title_platform": "Votre avis sur FidélitéPro",

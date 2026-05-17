@@ -6,7 +6,7 @@ import {
   MapPin, X, Plus, QrCode, Check, BarChart3, 
   Award, Crown, Gem, Sparkles, Settings, 
   ChevronRight, Search, Clock, Calendar, ChevronDown,
-  Ban, Camera, User, ArrowRight, Tag, Menu, Trash2, ToggleLeft, ToggleRight, Copy
+  Ban, Camera, User, ArrowRight, Tag, Menu, Trash2, ToggleLeft, ToggleRight, Copy, MessageSquare
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import { toast } from 'sonner';
@@ -478,6 +478,60 @@ export default function RestaurantDashboard({ tab, onTabChange }: RestaurantDash
     reward_description: '',
   });
 
+  const [promos, setPromos] = useState<any[]>([]);
+  const [promosLoading, setPromosLoading] = useState(true);
+  const [showCreatePromo, setShowCreatePromo] = useState(false);
+  const [promoForm, setPromoForm] = useState({
+    code: '',
+    description: '',
+    type: 'percentage' as 'percentage' | 'fixed' | 'free_item',
+    value: 10,
+    max_uses: '',
+    expires_at: '',
+  });
+  const [creating, setCreating] = useState(false);
+
+  const fetchPromos = async () => {
+    setPromosLoading(true);
+    try {
+      const res = await restaurantAPI.getPromoCodes();
+      setPromos(Array.isArray(res.data) ? res.data : []);
+    } catch {
+      toast.error(t('common.error'));
+    } finally {
+      setPromosLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (restaurant && tab === 'promos') {
+      fetchPromos();
+    }
+  }, [restaurant, tab]);
+
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [reviewsLoading, setReviewsLoading] = useState(true);
+
+  const fetchReviews = async () => {
+    if (!restaurant) return;
+    setReviewsLoading(true);
+    try {
+      const res = await reviewAPI.restaurant(restaurant.id);
+      setReviews(Array.isArray(res.data.data) ? res.data.data : []);
+    } catch {
+      toast.error(t('common.error'));
+    } finally {
+      setReviewsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (restaurant && tab === 'reviews') {
+      fetchReviews();
+    }
+  }, [restaurant, tab]);
+
+
   const fetchDashboard = async () => {
     setLoading(true);
     try {
@@ -825,33 +879,6 @@ export default function RestaurantDashboard({ tab, onTabChange }: RestaurantDash
 
   // ==================== PROMOS TAB ====================
   if (tab === 'promos') {
-    const [promos, setPromos] = useState<PromoCode[]>([]);
-    const [promosLoading, setPromosLoading] = useState(true);
-    const [showCreatePromo, setShowCreatePromo] = useState(false);
-    const [promoForm, setPromoForm] = useState({
-      code: '',
-      description: '',
-      type: 'percentage' as 'percentage' | 'fixed' | 'free_item',
-      value: 10,
-      max_uses: '',
-      expires_at: '',
-    });
-    const [creating, setCreating] = useState(false);
-
-    const fetchPromos = async () => {
-      setPromosLoading(true);
-      try {
-        const res = await restaurantAPI.getPromoCodes();
-        setPromos(Array.isArray(res.data) ? res.data : []);
-      } catch {
-        toast.error(t('common.error'));
-      } finally {
-        setPromosLoading(false);
-      }
-    };
-
-    useEffect(() => { fetchPromos(); }, []);
-
     const handleCreatePromo = async () => {
       if (!promoForm.description.trim()) return;
       setCreating(true);
@@ -1150,6 +1177,57 @@ export default function RestaurantDashboard({ tab, onTabChange }: RestaurantDash
                     {t('admin.delete')}
                   </button>
                 </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ==================== REVIEWS TAB ====================
+  if (tab === 'reviews') {
+    return (
+      <div className="space-y-6">
+        <h2 className="text-2xl font-display font-bold text-foreground">{t('dashboard.reviews', 'Avis')}</h2>
+
+        {reviewsLoading ? (
+          <div className="flex items-center justify-center h-32">
+            <div className="w-6 h-6 border-3 border-primary border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : reviews.length === 0 ? (
+          <div className="text-center py-16">
+            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+              <MessageSquare className="w-8 h-8 text-primary" />
+            </div>
+            <p className="text-foreground font-medium mb-1">{t('admin.no_pending_reviews', 'Aucun avis pour le moment.')}</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {reviews.map((review, i) => (
+              <motion.div
+                key={review.id}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.05 }}
+                className="card-elegant p-5"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary">
+                      {review.user?.name?.charAt(0) || 'U'}
+                    </div>
+                    <div>
+                      <p className="font-medium text-foreground">{review.user?.name || 'Client'}</p>
+                      <p className="text-xs text-muted-foreground">{new Date(review.created_at).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 bg-yellow-500/10 text-yellow-600 px-2 py-1 rounded-lg text-sm font-bold">
+                    <Star className="w-4 h-4 fill-current" />
+                    {review.rating}
+                  </div>
+                </div>
+                <p className="text-sm text-foreground leading-relaxed">{review.comment}</p>
               </motion.div>
             ))}
           </div>

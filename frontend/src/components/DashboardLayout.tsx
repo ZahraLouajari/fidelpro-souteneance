@@ -37,6 +37,7 @@ export default function DashboardLayout({ children, activeTab, onTabChange }: Pr
       { id: 'scan',      label: t('dashboard.scan'),         icon: Scan },
       { id: 'promos',    label: t('dashboard.promos'),       icon: Tag },
       { id: 'analytics', label: t('dashboard.analytics'),    icon: BarChart3 },
+      { id: 'reviews',   label: t('dashboard.reviews', 'Avis'), icon: MessageSquare },
       { id: 'settings',  label: t('dashboard.settings'),     icon: Settings },
     ],
     admin: [
@@ -59,6 +60,7 @@ export default function DashboardLayout({ children, activeTab, onTabChange }: Pr
     myqr:        t('dashboard.my_qr'),
     profile:     t('nav.dashboard'),
     analytics:   t('dashboard.analytics'),
+    reviews:     t('dashboard.reviews', 'Avis'),
     scan:        t('dashboard.scan'),
     settings:    t('dashboard.settings'),
     promos:      t('dashboard.promos'),

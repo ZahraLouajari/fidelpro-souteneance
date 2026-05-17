@@ -12,6 +12,9 @@
     "logout": "تسجيل الخروج"
   },
   "landing": {
+    "nav_features": "المميزات",
+    "nav_about": "حول",
+    "nav_contact": "اتصل بنا",
     "hero_title": "برنامج ولاء المطاعم،",
     "hero_highlight": "بشكل مختلف",
     "hero_subtitle": "منصة الولاء المتميزة للمطاعم وزبائنها. اكسب مكافآت، ابن علاقات، طوّر عملك.",
@@ -114,7 +117,11 @@
     "redeemed": "مستخدمة",
     "expired": "منتهية",
     "available": "متاحة",
-    "weekly_visits": "الزيارات الأسبوعية"
+    "weekly_visits": "الزيارات الأسبوعية",
+    "rate": "تقييم",
+    "invite_friends": "ادعُ أصدقاءك!",
+    "invite_desc": "شارك رمزك واكسب نقاطاً عن كل صديق يسجل ويسجل زيارة.",
+    "your_code": "رمزك الفريد"
   },
   "restaurant": {
     "total_clients": "إجمالي الزبائن",
@@ -166,7 +173,12 @@
     "platform_name": "اسم المنصة",
     "support_email": "بريد الدعم",
     "default_visits": "الزيارات الافتراضية",
-    "save_changes": "حفظ"
+    "save_changes": "حفظ",
+    "moderation_title": "الإشراف",
+    "no_pending_reviews": "لا توجد تقييمات معلقة.",
+    "approve": "موافقة",
+    "review_platform": "تقييم المنصة",
+    "review_restaurant": "رأي حول"
   },
   "notifications": {
     "title": "الإشعارات",
@@ -187,7 +199,21 @@
     "no_data": "لا توجد بيانات",
     "or": "أو",
     "points": "نقاط",
-    "visits": "زيارات"
+    "visits": "زيارات",
+    "restaurant_owner": "صاحب مطعم",
+    "client": "عميل",
+    "copied": "تم نسخ الرمز!"
+  },
+  "review": {
+    "title_platform": "رأيك في FidélitéPro",
+    "title_restaurant": "رأيك في",
+    "rating_label": "قيم تجربتك",
+    "comment_label": "تعليقك",
+    "placeholder": "أخبرنا برأيك...",
+    "empty_comment": "يرجى ترك تعليق.",
+    "success": "شكراً على تقييمك!",
+    "platform_header": "تجربتك مع FidélitéPro",
+    "rate_platform": "تقييم المنصة"
   },
   "promo": {
     "title": "رموز الخصم",

@@ -299,4 +299,19 @@ class ClientController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    // ─── Referral Stats ───────────────────────────────────────────────────────────
+    public function referralStats()
+    {
+        try {
+            $user = auth('api')->user();
+            return response()->json([
+                'referral_code' => $user->referral_code,
+                'total_points'  => $user->points ?? 0,
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('ReferralStats error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 }

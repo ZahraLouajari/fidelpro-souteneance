@@ -194,33 +194,33 @@ class DatabaseSeeder extends Seeder
 
             // ── Client Notifications (sans 'role') ──
             CustomNotification::updateOrCreate(
-                ['user_id' => $client->id, 'title' => 'Bienvenue sur FidélitéPro! 🎉'],
+                ['user_id' => $client->id, 'title' => json_encode(['fr' => 'Bienvenue sur FidélitéPro! 🎉', 'en' => 'Welcome to FidélitéPro! 🎉', 'ar' => 'مرحباً بك في FidélitéPro! 🎉'])],
                 [
-                    'message' => 'Votre compte est prêt. Commencez à gagner des points dès maintenant!',
+                    'message' => json_encode(['fr' => 'Votre compte est prêt. Commencez à gagner des points dès maintenant!', 'en' => 'Your account is ready. Start earning points now!', 'ar' => 'حسابك جاهز. ابدأ بكسب النقاط الآن!']),
                     'type' => 'system',
                     'is_read' => false,
                 ]
             );
             CustomNotification::updateOrCreate(
-                ['user_id' => $client->id, 'title' => 'Points gagnés! ⭐'],
+                ['user_id' => $client->id, 'title' => json_encode(['fr' => 'Points gagnés! ⭐', 'en' => 'Points earned! ⭐', 'ar' => 'تم اكتساب النقاط! ⭐'])],
                 [
-                    'message' => 'Vous avez gagné 10 points pour votre première visite.',
+                    'message' => json_encode(['fr' => 'Vous avez gagné 10 points pour votre première visite.', 'en' => 'You earned 10 points for your first visit.', 'ar' => 'لقد حصلت على 10 نقاط لزيارتك الأولى.']),
                     'type' => 'points',
                     'is_read' => false,
                 ]
             );
             CustomNotification::updateOrCreate(
-                ['user_id' => $client->id, 'title' => 'Nouvelle visite enregistrée ✅'],
+                ['user_id' => $client->id, 'title' => json_encode(['fr' => 'Nouvelle visite enregistrée ✅', 'en' => 'New visit recorded ✅', 'ar' => 'تم تسجيل زيارة جديدة ✅'])],
                 [
-                    'message' => 'Votre visite a été validée. Continuez comme ça!',
+                    'message' => json_encode(['fr' => 'Votre visite a été validée. Continuez comme ça!', 'en' => 'Your visit has been validated. Keep it up!', 'ar' => 'تم التحقق من زيارتك. واصل!']),
                     'type' => 'visit',
                     'is_read' => false,
                 ]
             );
             CustomNotification::updateOrCreate(
-                ['user_id' => $client->id, 'title' => 'Récompense disponible! 🎁'],
+                ['user_id' => $client->id, 'title' => json_encode(['fr' => 'Récompense disponible! 🎁', 'en' => 'Reward available! 🎁', 'ar' => 'المكافأة متاحة! 🎁'])],
                 [
-                    'message' => 'Vous avez débloqué une récompense! Rendez-vous dans l\'onglet Rewards.',
+                    'message' => json_encode(['fr' => 'Vous avez débloqué une récompense! Rendez-vous dans l\'onglet Rewards.', 'en' => 'You unlocked a reward! Go to the Rewards tab.', 'ar' => 'لقد فتحت مكافأة! انتقل إلى علامة تبويب المكافآت.']),
                     'type' => 'reward',
                     'is_read' => false,
                 ]
@@ -233,9 +233,13 @@ class DatabaseSeeder extends Seeder
             if (!$resto) continue;
 
             CustomNotification::updateOrCreate(
-                ['user_id' => $owner->id, 'title' => 'Bienvenue sur FidélitéPro! 🎉'],
+                ['user_id' => $owner->id, 'title' => json_encode(['fr' => 'Bienvenue sur FidélitéPro! 🎉', 'en' => 'Welcome to FidélitéPro! 🎉', 'ar' => 'مرحباً بك في FidélitéPro! 🎉'])],
                 [
-                    'message' => "Votre restaurant {$resto->name} est maintenant actif sur la plateforme.",
+                    'message' => json_encode([
+                        'fr' => "Votre restaurant {$resto->name} est maintenant actif sur la plateforme.",
+                        'en' => "Your restaurant {$resto->name} is now active on the platform.",
+                        'ar' => "مطعمك {$resto->name} نشط الآن على المنصة."
+                    ]),
                     'type' => 'system',
                     'is_read' => false,
                 ]
