@@ -128,8 +128,8 @@ export default function AdminDashboard({ tab }: { tab: string }) {
   };
 
   const filteredClients = clients.filter(c =>
-    c.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    c.email?.toLowerCase().includes(searchTerm.toLowerCase())
+    (c.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+    (c.email?.toLowerCase() || '').includes(searchTerm.toLowerCase())
   );
 
   const levelData = [

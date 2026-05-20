@@ -324,6 +324,9 @@ export const clientAPI = {
 export const restaurantAPI = {
   dashboard: () => axios.get<RestaurantDashboardResponse>('/restaurant/dashboard'),
 
+  createRestaurant: (data: CreateRestaurantData) =>
+    axios.post<{ message: string; restaurant: Restaurant }>('/restaurant/create', data),
+
   clients: () => axios.get<LoyaltyCard[]>('/restaurant/clients'),
 
   addClient: (data: { client_id?: number; email?: string }) =>
@@ -418,7 +421,7 @@ export const notificationAPI = {
 // ==================== REVIEW ENDPOINTS ====================
 export const reviewAPI = {
   platform: () => axios.get<Review[]>('/reviews/platform'),
-  restaurant: (id: number) => axios.get<Review[]>(`/reviews/restaurant/${id}`),
+  restaurant: (id: number) => axios.get<any>(`/reviews/restaurant/${id}`),
   store: (data: { restaurant_id?: number; rating: number; comment: string; type: 'platform' | 'restaurant' }) =>
     axios.post('/reviews', data),
 };

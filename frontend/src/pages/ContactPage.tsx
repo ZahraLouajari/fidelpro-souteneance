@@ -9,7 +9,7 @@ export default function ContactPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Message envoyé avec succès ! Nous vous répondrons bientôt.");
+    toast.success(t('contact.toast_success'));
   };
 
   return (
@@ -23,10 +23,10 @@ export default function ContactPage() {
             className="text-center mb-16"
           >
             <h1 className="text-4xl md:text-6xl font-display font-bold text-foreground mb-6">
-              Contactez <span className="text-gradient-warm">Nous</span>
+              {t('contact.title')} <span className="text-gradient-warm">{t('contact.title_highlight')}</span>
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Une question ? Une suggestion ? N'hésitez pas à nous écrire, notre équipe est là pour vous aider.
+              {t('contact.subtitle')}
             </p>
           </motion.div>
 
@@ -38,7 +38,7 @@ export default function ContactPage() {
                   <Mail className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">Email</h3>
+                  <h3 className="font-semibold text-foreground">{t('contact.info_email')}</h3>
                   <p className="text-muted-foreground">contact@fidelitepro.com</p>
                 </div>
               </div>
@@ -48,7 +48,7 @@ export default function ContactPage() {
                   <Phone className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">Téléphone</h3>
+                  <h3 className="font-semibold text-foreground">{t('contact.info_phone')}</h3>
                   <p className="text-muted-foreground">+33 1 23 45 67 89</p>
                 </div>
               </div>
@@ -58,7 +58,7 @@ export default function ContactPage() {
                   <MapPin className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">Bureaux</h3>
+                  <h3 className="font-semibold text-foreground">{t('contact.info_office')}</h3>
                   <p className="text-muted-foreground">75001 Paris, France</p>
                 </div>
               </div>
@@ -69,24 +69,24 @@ export default function ContactPage() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">Nom</label>
+                    <label className="text-sm font-medium text-foreground">{t('contact.form_name')}</label>
                     <input required type="text" className="w-full px-4 py-3 rounded-xl border border-input bg-background focus:ring-2 focus:ring-primary/20 transition-all" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">Email</label>
+                    <label className="text-sm font-medium text-foreground">{t('contact.form_email')}</label>
                     <input required type="email" className="w-full px-4 py-3 rounded-xl border border-input bg-background focus:ring-2 focus:ring-primary/20 transition-all" />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">Sujet</label>
+                  <label className="text-sm font-medium text-foreground">{t('contact.form_subject')}</label>
                   <input required type="text" className="w-full px-4 py-3 rounded-xl border border-input bg-background focus:ring-2 focus:ring-primary/20 transition-all" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">Message</label>
+                  <label className="text-sm font-medium text-foreground">{t('contact.form_message')}</label>
                   <textarea required rows={5} className="w-full px-4 py-3 rounded-xl border border-input bg-background focus:ring-2 focus:ring-primary/20 transition-all" />
                 </div>
                 <button type="submit" className="btn-warm w-full py-4 flex items-center justify-center gap-2">
-                  Envoyer <Send className="w-4 h-4" />
+                  {t('contact.form_send')} <Send className="w-4 h-4" />
                 </button>
               </form>
             </div>

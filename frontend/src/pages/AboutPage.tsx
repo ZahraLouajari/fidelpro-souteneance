@@ -17,38 +17,38 @@ export default function AboutPage() {
             className="text-center mb-16"
           >
             <h1 className="text-4xl md:text-6xl font-display font-bold text-foreground mb-6">
-              À propos de <span className="text-gradient-warm">FidélitéPro</span>
+              {t('about.title')} <span className="text-gradient-warm">FidélitéPro</span>
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Nous croyons que la fidélité devrait être simple, gratifiante et numérique.
+              {t('about.subtitle')}
             </p>
           </motion.div>
 
           <div className="prose prose-invert max-w-none mb-20">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="text-2xl font-display font-semibold text-foreground mb-4">Notre Mission</h2>
+                <h2 className="text-2xl font-display font-semibold text-foreground mb-4">{t('about.mission_title')}</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  FidélitéPro est né d'un constat simple : les cartes de fidélité en papier sont encombrantes, faciles à perdre et peu écologiques. Notre mission est de digitaliser l'expérience de fidélisation pour créer un lien plus fort et plus moderne entre les restaurateurs et leurs clients.
+                  {t('about.mission_desc')}
                 </p>
               </div>
               <div className="bg-primary/5 rounded-3xl p-8 border border-primary/10">
                 <div className="grid grid-cols-2 gap-6">
                   <div className="text-center">
                     <p className="text-3xl font-bold text-primary mb-1">500+</p>
-                    <p className="text-xs text-muted-foreground">Restaurants</p>
+                    <p className="text-xs text-muted-foreground">{t('about.stats_restaurants')}</p>
                   </div>
                   <div className="text-center">
                     <p className="text-3xl font-bold text-primary mb-1">10k+</p>
-                    <p className="text-xs text-muted-foreground">Utilisateurs</p>
+                    <p className="text-xs text-muted-foreground">{t('about.stats_users')}</p>
                   </div>
                   <div className="text-center">
                     <p className="text-3xl font-bold text-primary mb-1">50k+</p>
-                    <p className="text-xs text-muted-foreground">Visites</p>
+                    <p className="text-xs text-muted-foreground">{t('about.stats_visits')}</p>
                   </div>
                   <div className="text-center">
                     <p className="text-3xl font-bold text-primary mb-1">4.9/5</p>
-                    <p className="text-xs text-muted-foreground">Note moyenne</p>
+                    <p className="text-xs text-muted-foreground">{t('about.stats_rating')}</p>
                   </div>
                 </div>
               </div>
@@ -57,9 +57,9 @@ export default function AboutPage() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { icon: Users, title: "Communauté", desc: "Rejoignez des milliers de gourmets passionnés." },
-              { icon: Award, title: "Excellence", desc: "Nous ne sélectionnons que les meilleurs établissements." },
-              { icon: TrendingUp, title: "Innovation", desc: "Toujours à la pointe des nouvelles technologies." },
+              { icon: Users, title: t('about.val_community'), desc: t('about.val_community_desc') },
+              { icon: Award, title: t('about.val_excellence'), desc: t('about.val_excellence_desc') },
+              { icon: TrendingUp, title: t('about.val_innovation'), desc: t('about.val_innovation_desc') },
             ].map((item, i) => (
               <motion.div
                 key={i}

@@ -140,21 +140,14 @@ function CreateRestaurantForm({ onSuccess }: Props) {
     setError('');
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/api/restaurant/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || t('common.error'));
+      await restaurantAPI.createRestaurant(formData);
       toast.success(t('common.success'));
       onSuccess();
     } catch (err: any) {
-      setError(err.message);
+      const msg = err.response?.data?.errors
+        ? Object.values(err.response.data.errors).flat().join(', ')
+        : err.response?.data?.error || err.message || t('common.error');
+      setError(msg);
       setStep(1);
     } finally {
       setLoading(false);
@@ -655,8 +648,8 @@ export default function RestaurantDashboard({ tab, onTabChange }: RestaurantDash
   };
 
   const filteredClients = clients.filter(card => 
-    card.client?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    card.client?.email?.toLowerCase().includes(searchTerm.toLowerCase())
+    (card.client?.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+    (card.client?.email?.toLowerCase() || '').includes(searchTerm.toLowerCase())
   );
 
   const displayedClients = showAllClients ? filteredClients : filteredClients.slice(0, 5);

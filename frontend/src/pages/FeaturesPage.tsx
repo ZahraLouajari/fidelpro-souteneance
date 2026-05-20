@@ -10,9 +10,9 @@ export default function FeaturesPage() {
     { icon: Star,       title: t('landing.feature_points_title'),  desc: t('landing.feature_points_desc')  },
     { icon: Gift,       title: t('landing.feature_rewards_title'), desc: t('landing.feature_rewards_desc') },
     { icon: Shield,     title: t('landing.feature_secure_title'),  desc: t('landing.feature_secure_desc')  },
-    { icon: Smartphone, title: "Expérience Mobile",              desc: "Une interface fluide conçue pour être utilisée en déplacement." },
-    { icon: Zap,        title: "Scan Instantané",                desc: "Validez vos visites en un clin d'œil avec le QR code unique." },
-    { icon: Heart,      title: "Favoris",                        desc: "Gardez vos restaurants préférés à portée de main." },
+    { icon: Smartphone, title: t('features_page.feat_mobile'),     desc: t('features_page.feat_mobile_desc') },
+    { icon: Zap,        title: t('features_page.feat_scan'),       desc: t('features_page.feat_scan_desc') },
+    { icon: Heart,      title: t('features_page.feat_favorites'),  desc: t('features_page.feat_favorites_desc') },
   ];
 
   return (
@@ -26,10 +26,10 @@ export default function FeaturesPage() {
             className="text-center mb-20"
           >
             <h1 className="text-4xl md:text-6xl font-display font-bold text-foreground mb-6">
-              Nos <span className="text-gradient-warm">Fonctionnalités</span>
+              {t('features_page.title')} <span className="text-gradient-warm">{t('features_page.title_highlight')}</span>
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Découvrez tout ce que FidélitéPro peut faire pour vous, que vous soyez un gourmet ou un restaurateur.
+              {t('features_page.subtitle')}
             </p>
           </motion.div>
 

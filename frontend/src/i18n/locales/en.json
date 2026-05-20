@@ -257,5 +257,46 @@
     "no_history": "No promo codes used yet.",
     "unlimited": "Unlimited",
     "auto_generate": "Auto-generate"
+  },
+  "about": {
+    "title": "About",
+    "subtitle": "We believe loyalty should be simple, rewarding, and digital.",
+    "mission_title": "Our Mission",
+    "mission_desc": "FidélitéPro was born from a simple observation: paper loyalty cards are bulky, easy to lose, and not very ecological. Our mission is to digitize the loyalty experience to create a stronger and more modern bond between restaurateurs and their clients.",
+    "stats_restaurants": "Restaurants",
+    "stats_users": "Users",
+    "stats_visits": "Visits",
+    "stats_rating": "Average Rating",
+    "val_community": "Community",
+    "val_community_desc": "Join thousands of passionate foodies.",
+    "val_excellence": "Excellence",
+    "val_excellence_desc": "We select only the best establishments.",
+    "val_innovation": "Innovation",
+    "val_innovation_desc": "Always at the forefront of new technologies."
+  },
+  "features_page": {
+    "title": "Our",
+    "title_highlight": "Features",
+    "subtitle": "Discover everything FidélitéPro can do for you, whether you are a foodie or a restaurateur.",
+    "feat_mobile": "Mobile Experience",
+    "feat_mobile_desc": "A fluid interface designed to be used on the go.",
+    "feat_scan": "Instant Scan",
+    "feat_scan_desc": "Validate your visits in the blink of an eye with the unique QR code.",
+    "feat_favorites": "Favorites",
+    "feat_favorites_desc": "Keep your favorite restaurants at your fingertips."
+  },
+  "contact": {
+    "title": "Contact",
+    "title_highlight": "Us",
+    "subtitle": "A question? A suggestion? Do not hesitate to write to us, our team is here to help you.",
+    "info_email": "Email",
+    "info_phone": "Phone",
+    "info_office": "Office",
+    "form_name": "Name",
+    "form_email": "Email",
+    "form_subject": "Subject",
+    "form_message": "Message",
+    "form_send": "Send",
+    "toast_success": "Message sent successfully! We will get back to you soon."
   }
 }

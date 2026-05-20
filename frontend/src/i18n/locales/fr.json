@@ -257,5 +257,46 @@
     "no_history": "Aucun code promo utilisé.",
     "unlimited": "Illimité",
     "auto_generate": "Générer automatiquement"
+  },
+  "about": {
+    "title": "À propos de",
+    "subtitle": "Nous croyons que la fidélité devrait être simple, gratifiante et numérique.",
+    "mission_title": "Notre Mission",
+    "mission_desc": "FidélitéPro est né d'un constat simple : les cartes de fidélité en papier sont encombrantes, faciles à perdre et peu écologiques. Notre mission est de digitaliser l'expérience de fidélisation pour créer un lien plus fort et plus moderne entre les restaurateurs et leurs clients.",
+    "stats_restaurants": "Restaurants",
+    "stats_users": "Utilisateurs",
+    "stats_visits": "Visites",
+    "stats_rating": "Note moyenne",
+    "val_community": "Communauté",
+    "val_community_desc": "Rejoignez des milliers de gourmets passionnés.",
+    "val_excellence": "Excellence",
+    "val_excellence_desc": "Nous ne sélectionnons que les meilleurs établissements.",
+    "val_innovation": "Innovation",
+    "val_innovation_desc": "Toujours à la pointe des nouvelles technologies."
+  },
+  "features_page": {
+    "title": "Nos",
+    "title_highlight": "Fonctionnalités",
+    "subtitle": "Découvrez tout ce que FidélitéPro peut faire pour vous, que vous soyez un gourmet ou un restaurateur.",
+    "feat_mobile": "Expérience Mobile",
+    "feat_mobile_desc": "Une interface fluide conçue pour être utilisée en déplacement.",
+    "feat_scan": "Scan Instantané",
+    "feat_scan_desc": "Validez vos visites en un clin d'œil avec le QR code unique.",
+    "feat_favorites": "Favoris",
+    "feat_favorites_desc": "Gardez vos restaurants préférés à portée de main."
+  },
+  "contact": {
+    "title": "Contactez",
+    "title_highlight": "Nous",
+    "subtitle": "Une question ? Une suggestion ? N'hésitez pas à nous écrire, notre équipe est là pour vous aider.",
+    "info_email": "Email",
+    "info_phone": "Téléphone",
+    "info_office": "Bureaux",
+    "form_name": "Nom",
+    "form_email": "Email",
+    "form_subject": "Sujet",
+    "form_message": "Message",
+    "form_send": "Envoyer",
+    "toast_success": "Message envoyé avec succès ! Nous vous répondrons bientôt."
   }
 }
